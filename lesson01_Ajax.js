@@ -15,13 +15,35 @@ function exampleFunction(){
 }
 
 console.log('Start'); //1.This line executes first
-
 exampleFunction(); //2.Then exampleFunction was invoked and a new queue was added in the callstack
-
 console.log('End'); //5.Now we are back to the main() execution stack and this line executes last
 
+/*
+Here is the natural flow of our code
+CAllSTACK
+ - - - - - -
+| main();   |  
+ - - - - - - 
+
+ exampleFunction and a new execution context is added to the queue
+ CALLSTACK
+  - - - - - - - - - -
+| exampleFunction(); |
+  - - - - - - - - - - 
+ - - - - - -
+| main();   |
+ - - - - - - 
+
+ after all the code within exampleFunctio is executed then we are back to main callstack
+CALLSTACK
+  - - - - - -
+| main();   |  
+ - - - - - - 
+
+*/
 
 
+//But how is async code different? Let's have a look
 //Asynchronous code - Now we instead are invoking a setTimeout function which by natura is an async function
 
 
@@ -31,10 +53,36 @@ setTimeout(() =>{ console.log('We are in the timeout'); }, 2000); //2. Then setT
 
 console.log('End'); //3. This line executes second
 
-//Web apis is in the browser and keeps track of those things for us. setTimeout gets popped out of callstack to web apis 
-//And comes back once the return is ready
+/*
+Here is the natural flow of our code
+CAllSTACK
+ - - - - - -
+| main();   |  
+ - - - - - - 
 
-//event listeners
-//set Timeout
-//set Interval
-//All these are passed on to the web apis
+ once setTimeout is invoked, that is added to our callstack 
+CALLSTACK
+   - - - - - - - - - -
+| exampleFunction(); |
+  - - - - - - - - - - 
+ - - - - - -
+| main();   |
+ - - - - - - 
+
+ but since setTimeout is of async type, setTimeout is removed from the queue and added to what is called web apis. Web apis are a tool that browsers gives us access to
+ essentially setTimeout is out of the callstack and will remain in the web apis until its ready the code is ready .. in this case its 2 seconds
+
+ CALLSTACK               Web apis
+ - - - - - -            - - - - - - 
+| main();   |          | setTimeout |
+ - - - - - -            - - - - - - 
+
+ while setTimeout is 'trapped' in our web apis, the rest of our code continues. Now eveerything in our callstack has been executed! Once the 2 seconds are finished, setTimeout
+ is returned to the callstack queue
+ CALLSTACK              
+ - - - - - - - - -            
+| setTimeout();   |       
+ - - - - - - - - -     
+*/
+
+//Some functionallity is by default of asynchronous type, such as setTimeout, setInterval, eventListeners, etc.
