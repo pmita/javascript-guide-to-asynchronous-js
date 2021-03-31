@@ -39,7 +39,6 @@ CALLSTACK
   - - - - - -
 | main();   |  
  - - - - - - 
-
 */
 
 
@@ -48,9 +47,7 @@ CALLSTACK
 
 
 console.log('Start'); //1. This line executes first
-
 setTimeout(() =>{ console.log('We are in the timeout'); }, 2000); //2. Then setTimeout is invoked //4. After 2s we come back and the console.log is executed
-
 console.log('End'); //3. This line executes second
 
 /*
