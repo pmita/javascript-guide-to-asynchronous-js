@@ -63,5 +63,4 @@ loginUser('example', 1234)
      console.log(emailDetails)
 });
 
-
 console.log('End'); 
